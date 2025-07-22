@@ -11,10 +11,12 @@ from routers.meals import router as meals_router
 from routers.goals import router as goals_router
 from routers.health import router as health_router
 from routers.debug import router as debug_router
+from routers.metrics import router as metrics_router
 from core.auth import get_api_key
 from core.ratelimit import RateLimitMiddleware
 from core.errors import global_exception_handler
 from core.analytics import AnalyticsTracker
+import uuid
 analytics = AnalyticsTracker()
 
 # Logging setup
@@ -23,11 +25,11 @@ logger = structlog.get_logger()
 # Middleware for request ID and logging
 class RequestIDMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        request_id = request.headers.get('X-Request-ID', os.urandom(8).hex())
+        request_id = request.headers.get('X-Trace-ID') or str(uuid.uuid4())
         request.state.request_id = request_id
         logger.info("request.start", request_id=request_id, path=request.url.path)
         response = await call_next(request)
-        response.headers['X-Request-ID'] = request_id
+        response.headers['X-Trace-ID'] = request_id
         logger.info("request.end", request_id=request_id, status_code=response.status_code)
         return response
 
@@ -91,6 +93,7 @@ def create_app() -> FastAPI:
     app.include_router(goals_router, prefix="/api/v1", dependencies=[Depends(get_api_key)])
     app.include_router(health_router, prefix="/api/v1")
     app.include_router(debug_router, prefix="/api/v1")
+    app.include_router(metrics_router, prefix="/api/v1")
 
     # Override global exception handler
     app.add_exception_handler(Exception, global_exception_handler)

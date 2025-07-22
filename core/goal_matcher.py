@@ -11,13 +11,13 @@ class FuzzyGoalMatcher:
 
     def match(self, input_str: str) -> Dict[str, Any]:
         input_norm = input_str.strip().lower()
-        # Direct synonym match
+        # Exact or synonym match
         if input_norm in self.synonyms:
             canonical = self.synonyms[input_norm]
             return {
-                "goal": canonical,
+                "goal_name": canonical,
                 "confidence": 100,
-                "input": input_str,
+                "input_term": input_str,
                 "suggestions": []
             }
         # Fuzzy match
@@ -30,9 +30,9 @@ class FuzzyGoalMatcher:
                 best_goal = self.synonyms.get(term, term) if term in self.synonyms else term
         if best_score >= 80:
             return {
-                "goal": best_goal,
+                "goal_name": best_goal,
                 "confidence": best_score,
-                "input": input_str,
+                "input_term": input_str,
                 "suggestions": []
             }
         # Suggest closest goals

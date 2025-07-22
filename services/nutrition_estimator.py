@@ -6,6 +6,7 @@ from typing import Dict, Any, Optional
 from config.config import get_settings
 from schemas.responses import NutritionInfo
 import structlog
+from core.analytics import log_event
 
 logger = structlog.get_logger()
 
@@ -66,6 +67,15 @@ class NutritionEstimator:
                 content = response.choices[0].message.content
                 data = self._safe_json_load(content)
                 if data and "calories" in data:
+                    # Log GPT token usage
+                    log_event('token_usage', {
+                        'model': self.model,
+                        'tokens': response.usage.total_tokens if hasattr(response, 'usage') else None,
+                        'name': name,
+                        'desc': description
+                    })
+                    data["confidence_level"] = "high"
+                    data["estimation_origin"] = "gpt"
                     return {
                         "nutrition": data,
                         "origin": "gpt",
@@ -75,6 +85,7 @@ class NutritionEstimator:
                 logger.warn("nutrition.gpt.retry", error=str(e), attempt=attempt)
                 await asyncio.sleep(2 ** attempt)
         # Fallback: rule-based
+        log_event('fallback_used', {'method': 'rule/manual', 'name': name, 'desc': description})
         return self._rule_based_estimate(name, description)
 
     def _rule_based_estimate(self, name: str, description: str) -> Dict[str, Any]:
@@ -87,7 +98,9 @@ class NutritionEstimator:
                     "protein": float(sum(tpl["protein"]) / 2),
                     "carbs": float(sum(tpl["carbs"]) / 2),
                     "fat": float(sum(tpl["fat"]) / 2),
-                    "fiber": None, "sugar": None, "sodium": None
+                    "fiber": None, "sugar": None, "sodium": None,
+                    "confidence_level": "medium",
+                    "estimation_origin": "rule"
                 }
                 return {
                     "nutrition": nutrition,
@@ -95,10 +108,13 @@ class NutritionEstimator:
                     "confidence": "medium"
                 }
         # Manual fallback
+        nutrition = {
+            "calories": 400, "protein": 20, "carbs": 40, "fat": 10, "fiber": None, "sugar": None, "sodium": None,
+            "confidence_level": "low",
+            "estimation_origin": "manual"
+        }
         return {
-            "nutrition": {
-                "calories": 400, "protein": 20, "carbs": 40, "fat": 10, "fiber": None, "sugar": None, "sodium": None
-            },
+            "nutrition": nutrition,
             "origin": "manual",
             "confidence": "low"
         }

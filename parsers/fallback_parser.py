@@ -21,7 +21,9 @@ class FallbackParser:
                     "price": price,
                     "tags": [],
                     "relevance_score": 0.5,
-                    "nutrition_estimate": {"calories": None, "protein": None, "carbs": None, "fat": None}
+                    "nutrition_estimate": {"calories": None, "protein": None, "carbs": None, "fat": None},
+                    "confidence_level": "low",
+                    "estimation_origin": "manual"
                 })
         return {
             "meals": meals,

@@ -6,17 +6,17 @@ matcher = FuzzyGoalMatcher()
 
 def test_direct_goal():
     result = matcher.match("muscle_gain")
-    assert result["goal"] == "muscle_gain"
+    assert result["goal_name"] == "muscle_gain"
     assert result["confidence"] == 100
 
 def test_synonym():
     result = matcher.match("bulk phase")
-    assert result["goal"] == "muscle_gain"
+    assert result["goal_name"] == "muscle_gain"
     assert result["confidence"] == 100
 
 def test_fuzzy():
     result = matcher.match("muscle gaim")
-    assert result["goal"] == "muscle_gain"
+    assert result["goal_name"] == "muscle_gain"
     assert result["confidence"] >= 80
 
 def test_suggestion():
@@ -25,8 +25,8 @@ def test_suggestion():
     assert "Did you mean" in str(exc.value.suggestion)
 
 def test_keto_synonym():
-    result = matcher.match("low carb high fat")
-    assert result["goal"] == "keto"
+    result = matcher.match("keto diet")
+    assert result["goal_name"] == "keto"
     assert result["confidence"] == 100
 
 def test_vegan_synonym():

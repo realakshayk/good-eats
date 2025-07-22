@@ -38,10 +38,16 @@ class ParsingError(Exception):
         self.message = message
         self.details = details
 
+class GoalMatchError(Exception):
+    def __init__(self, message: str, suggestion: str = "Try a different goal."):
+        self.message = message
+        self.suggestion = suggestion
+
 class ErrorResponse(BaseModel):
     success: bool = False
     error: dict
     timestamp: datetime = datetime.utcnow()
+    trace_id: str = None
 
 async def global_exception_handler(request: Request, exc: Exception):
     trace_id = getattr(request.state, 'request_id', None)
@@ -61,7 +67,10 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code = status.HTTP_404_NOT_FOUND
     elif error_type == "ValidationError":
         status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
-    return JSONResponse(
+    response = JSONResponse(
         status_code=status_code,
-        content=ErrorResponse(error=error_dict).dict()
-    ) 
+        content=ErrorResponse(error=error_dict, trace_id=trace_id).dict()
+    )
+    if trace_id:
+        response.headers["X-Trace-ID"] = trace_id
+    return response 

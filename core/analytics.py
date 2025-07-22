@@ -11,6 +11,24 @@ try:
 except Exception:
     redis_client = None
 
+ANALYTICS_FILE = os.path.join(os.path.dirname(__file__), '../logs/analytics.jsonl')
+
+def log_event(event_type, payload):
+    event = {
+        'type': event_type,
+        'payload': payload,
+        'timestamp': datetime.utcnow().isoformat()
+    }
+    if redis_client:
+        try:
+            redis_client.xadd('analytics', event)
+            return
+        except Exception:
+            pass
+    # Fallback to file
+    with open(ANALYTICS_FILE, 'a') as f:
+        f.write(json.dumps(event) + '\n')
+
 class AnalyticsTracker:
     def __init__(self):
         self.redis = redis_client

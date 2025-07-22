@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 from config.config import get_settings
 import structlog
 import time
+from core.analytics import log_event
 
 logger = structlog.get_logger()
 
@@ -71,6 +72,15 @@ class OpenAIParser:
                 content = response.choices[0].message.content
                 data = self._safe_json_load(content)
                 if data and "meals" in data:
+                    # Log GPT token usage
+                    log_event('token_usage', {
+                        'model': self.model,
+                        'tokens': response.usage.total_tokens if hasattr(response, 'usage') else None,
+                        'input': raw_text
+                    })
+                    for meal in data["meals"]:
+                        meal["confidence_level"] = "high"
+                        meal["estimation_origin"] = "gpt"
                     return {
                         "meals": data["meals"],
                         "source": "GPT",
@@ -85,6 +95,7 @@ class OpenAIParser:
             "confidence": "low",
             "error": "Failed to parse menu with OpenAI."
         }
+        log_event('fallback_used', {'method': 'openai_parser', 'input': raw_text})
 
     async def _respect_rate_limit(self):
         now = time.time()

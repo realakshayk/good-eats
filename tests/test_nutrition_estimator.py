@@ -19,6 +19,8 @@ async def test_gpt_estimate():
     assert result["origin"] == "gpt"
     assert result["confidence"] == "high"
     assert result["nutrition"]["calories"] == 450
+    assert result["nutrition"]["confidence_level"] == "high"
+    assert result["nutrition"]["estimation_origin"] == "gpt"
 
 @pytest.mark.asyncio
 async def test_rule_based_estimate():
@@ -27,6 +29,8 @@ async def test_rule_based_estimate():
     assert result["origin"] == "rule"
     assert result["confidence"] == "medium"
     assert 600 <= result["nutrition"]["calories"] <= 800
+    assert result["nutrition"]["confidence_level"] == "medium"
+    assert result["nutrition"]["estimation_origin"] == "rule"
 
 @pytest.mark.asyncio
 async def test_manual_fallback():
@@ -35,6 +39,8 @@ async def test_manual_fallback():
     assert result["origin"] == "manual"
     assert result["confidence"] == "low"
     assert result["nutrition"]["calories"] == 400
+    assert result["nutrition"]["confidence_level"] == "low"
+    assert result["nutrition"]["estimation_origin"] == "manual"
 
 def test_goal_fit_analyzer():
     info = NutritionInfo(calories=700, protein=30, carbs=50, fat=35)
