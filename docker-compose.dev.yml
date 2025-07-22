@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    command: uvicorn main:create_app --factory --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./static:/app/static
+      - ./docs:/app/docs
+      - ./.env.dev:/app/.env
+    env_file:
+      - .env.dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  streamlit:
+    image: python:3.11-slim
+    working_dir: /app
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    volumes:
+      - .:/app
+      - ./.env.dev:/app/.env
+    env_file:
+      - .env.dev
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api 

@@ -1,0 +1,47 @@
+name: Deploy Good Eats
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+        env: [test, staging, prod]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Lint
+        run: |
+          pip install black flake8
+          black --check .
+          flake8 .
+      - name: Test
+        run: pytest
+      - name: Build Docker image
+        run: docker build -t goodeats:${{ github.sha }} .
+
+  deploy:
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to server/registry (stub)
+        run: echo "Deploy step here (e.g., push to registry, SSH, or cloud)"
+      - name: Health check
+        run: |
+          sleep 10
+          curl --fail http://localhost/api/v1/health/ready || exit 1 

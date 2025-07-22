@@ -1,0 +1,14 @@
+[Unit]
+Description=Good Eats FastAPI Service
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/good-eats
+ExecStart=/usr/local/bin/uvicorn main:create_app --factory --host 0.0.0.0 --port 8000
+Restart=always
+EnvironmentFile=/opt/good-eats/.env.prod
+
+[Install]
+WantedBy=multi-user.target 

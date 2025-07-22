@@ -1,0 +1,30 @@
+[
+  {
+    "id": "meal1",
+    "name": "Grilled Chicken Bowl",
+    "restaurant": "Fit Kitchen",
+    "nutrition": {"calories": 500, "protein": 40, "carbs": 45, "fat": 15},
+    "score": 90
+  },
+  {
+    "id": "meal2",
+    "name": "Vegan Power Salad",
+    "restaurant": "Fit Kitchen",
+    "nutrition": {"calories": 420, "protein": 22, "carbs": 60, "fat": 10},
+    "score": 85
+  },
+  {
+    "id": "meal3",
+    "name": "Steak & Quinoa Plate",
+    "restaurant": "Protein Palace",
+    "nutrition": {"calories": 650, "protein": 55, "carbs": 50, "fat": 20},
+    "score": 88
+  },
+  {
+    "id": "meal4",
+    "name": "Keto Avocado Burger",
+    "restaurant": "Protein Palace",
+    "nutrition": {"calories": 600, "protein": 30, "carbs": 10, "fat": 45},
+    "score": 92
+  }
+] 

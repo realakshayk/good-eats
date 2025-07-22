@@ -1,0 +1,12 @@
+{
+  "burger": {"calories": [550, 850], "protein": [25, 40], "carbs": [35, 60], "fat": [25, 45]},
+  "salad": {"calories": [250, 500], "protein": [5, 20], "carbs": [10, 30], "fat": [10, 30]},
+  "bowl": {"calories": [400, 700], "protein": [20, 35], "carbs": [40, 80], "fat": [10, 25]},
+  "pizza": {"calories": [600, 1200], "protein": [20, 40], "carbs": [70, 120], "fat": [20, 50]},
+  "wrap": {"calories": [350, 600], "protein": [15, 30], "carbs": [30, 60], "fat": [10, 25]},
+  "steak": {"calories": [400, 700], "protein": [35, 60], "carbs": [0, 10], "fat": [20, 40]},
+  "tofu": {"calories": [250, 400], "protein": [15, 25], "carbs": [10, 20], "fat": [10, 20]},
+  "chicken": {"calories": [300, 500], "protein": [25, 40], "carbs": [0, 10], "fat": [10, 20]},
+  "fish": {"calories": [250, 450], "protein": [20, 35], "carbs": [0, 10], "fat": [10, 20]},
+  "pasta": {"calories": [400, 700], "protein": [10, 20], "carbs": [70, 110], "fat": [10, 25]}
+} 

@@ -1,0 +1,25 @@
+{
+  "meals": [
+    {
+      "name": "Test Meal",
+      "description": "A delicious test meal",
+      "price": "$10.99",
+      "tags": ["test", "mock"],
+      "restaurant": {
+        "name": "Testaurant",
+        "address": "123 Test St, Test City",
+        "place_id": "test_place_id",
+        "rating": 4.5,
+        "distance_miles": 1.2
+      },
+      "nutrition": {
+        "calories": 500,
+        "protein": 35,
+        "carbs": 45,
+        "fat": 15
+      },
+      "relevance_score": 0.9,
+      "confidence_level": "high"
+    }
+  ]
+} 

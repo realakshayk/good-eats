@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: Good Eats API
+  version: 1.0.0
+  description: |
+    AI-powered meal recommendation engine. See /docs for full interactive API.
+servers:
+  - url: https://api.goodeats.com/api/v1
+paths:
+  /meals/find:
+    post:
+      summary: Find meals by location, goal, macros, exclusions
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindMealsRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindMealsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    FindMealsRequest:
+      type: object
+      properties:
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+            lon:
+              type: number
+        goal:
+          type: string
+        radius:
+          type: number
+        override_macros:
+          type: object
+        flavor_preferences:
+          type: array
+          items:
+            type: string
+        exclude_ingredients:
+          type: array
+          items:
+            type: string
+    FindMealsResponse:
+      type: object
+      properties:
+        meals:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealCard'
+        total_results:
+          type: integer
+        location_summary:
+          type: string
+    MealCard:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        relevance_score:
+          type: number
+        confidence_level:
+          type: string
+        nutrition:
+          $ref: '#/components/schemas/NutritionInfo'
+        restaurant:
+          $ref: '#/components/schemas/RestaurantSummary'
+    NutritionInfo:
+      type: object
+      properties:
+        calories:
+          type: integer
+        protein:
+          type: number
+        carbs:
+          type: number
+        fat:
+          type: number
+    RestaurantSummary:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        place_id:
+          type: string
+        rating:
+          type: number
+        distance_miles:
+          type: number
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        error:
+          type: object
+        timestamp:
+          type: string 

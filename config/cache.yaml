@@ -1,0 +1,5 @@
+cache:
+  meals_ttl: 3600   # 1 hour
+  places_ttl: 3600  # 1 hour
+  menus_ttl: 21600  # 6 hours
+  fallback_ttl: 600 # 10 minutes 

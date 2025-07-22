@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Fit Kitchen",
+    "place_id": "mock_place_1",
+    "location": {"lat": 40.7128, "lng": -74.0060},
+    "rating": 4.7,
+    "open_now": true,
+    "website": "https://fitkitchen.example.com"
+  },
+  {
+    "name": "Protein Palace",
+    "place_id": "mock_place_2",
+    "location": {"lat": 40.7138, "lng": -74.0050},
+    "rating": 4.5,
+    "open_now": false,
+    "website": "https://proteinpalace.example.com"
+  }
+] 

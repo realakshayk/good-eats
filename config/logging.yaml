@@ -1,0 +1,7 @@
+level: INFO
+log_to_file: true
+file_path: logs/app.log
+max_bytes: 1048576
+backup_count: 5
+error_file_path: logs/error.log
+env: dev 

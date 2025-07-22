@@ -1,0 +1,10 @@
+api_keys:
+  test-free-key:
+    plan: free
+    description: Test Free Key
+  test-premium-key:
+    plan: premium
+    description: Test Premium Key
+  test-enterprise-key:
+    plan: enterprise
+    description: Test Enterprise Key 

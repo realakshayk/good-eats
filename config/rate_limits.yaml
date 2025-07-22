@@ -1,0 +1,10 @@
+rate_limits:
+  free:
+    rpm: 10
+    rph: 100
+  premium:
+    rpm: 60
+    rph: 1000
+  enterprise:
+    rpm: 300
+    rph: 10000 

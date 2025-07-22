@@ -1,0 +1,17 @@
+# Copy this file to .env and fill in your API keys
+
+# API Keys (Required)
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Application Settings (Optional)
+MAX_RESTAURANTS=10
+MAX_RECOMMENDATIONS=5
+SEARCH_RADIUS_METERS=5000
+
+# LLM Settings (Optional)
+OPENAI_MODEL=gpt-3.5-turbo
+MAX_TOKENS=1000
+
+# Scraping Settings (Optional)
+SCRAPING_TIMEOUT=30 
